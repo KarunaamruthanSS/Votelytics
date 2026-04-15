@@ -6,6 +6,21 @@ import { Loader2, Trophy, AlertTriangle, IndianRupee, GraduationCap, Users } fro
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 import { useMemo } from 'react';
 
+// Type for a candidate record
+interface Candidate {
+  id: number;
+  candidate_name: string;
+  party: string;
+  votes: number;
+  vote_share: string;
+  district: string;
+  constituency_no: string;
+  education?: string;
+  criminal_cases?: number;
+  assets?: number;
+  [key: string]: any;
+}
+
 // Help functions to normalize scores for Best Candidate Algorithm
 const parseEducation = (edu: string) => {
   if (!edu) return 0;
@@ -32,16 +47,16 @@ export default function ConstituencyPage() {
     },
   });
 
-  const candidates = data?.candidates || [];
+  const candidates: Candidate[] = data?.candidates || [];
 
   const { winner, district, constituency_no } = useMemo(() => {
-    if (candidates.length === 0) return { winner: null, district: '', constituency_no: '' };
+    if (candidates.length === 0) return { winner: null as Candidate | null, district: '', constituency_no: '' };
     
     const district = candidates[0].district;
     const constituency_no = candidates[0].constituency_no;
     
     // Algorithm: Highest Votes is the Winner
-    let best = null;
+    let best: Candidate | null = null;
     let maxVotes = -Infinity;
 
     candidates.forEach((c: any) => {
@@ -173,7 +188,7 @@ export default function ConstituencyPage() {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                  label={({ name, percent }) => `${name} (${((percent ?? 0) * 100).toFixed(0)}%)`}
                 >
                   {chartData.map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
