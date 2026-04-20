@@ -33,8 +33,9 @@ export async function POST(req: NextRequest) {
         votes,
         vote_share,
         age,
-        education
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        education,
+        year
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const insertMany = db.transaction((records) => {
@@ -52,8 +53,9 @@ export async function POST(req: NextRequest) {
         const vote_share = parseFloat(record.Vote_Share_Percentage || record.vote_share) || 0;
         const age = parseInt(record.Age || record.age) || 0;
         const education = record.MyNeta_education || record.education || "";
+        const year = parseInt(record.Year || record.year) || 0;
 
-        stmt.run(name, constituency, constituency_no, district, party, votes, vote_share, age, education);
+        stmt.run(name, constituency, constituency_no, district, party, votes, vote_share, age, education, year);
       }
     });
 
