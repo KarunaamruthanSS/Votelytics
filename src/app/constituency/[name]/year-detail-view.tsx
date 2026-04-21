@@ -39,13 +39,13 @@ export default function YearDetailView({ constituencyName, year }: YearDetailVie
 
   const candidates: Candidate[] = data?.candidates || [];
 
-  const winner = useMemo(() => {
+  const winner = useMemo<Candidate | null>(() => {
     if (candidates.length === 0) return null;
     
     let best: Candidate | null = null;
     let maxVotes = -Infinity;
 
-    candidates.forEach((c: any) => {
+    candidates.forEach((c) => {
       const votes = c.votes || 0;
       if (votes > maxVotes) {
         maxVotes = votes;
@@ -86,7 +86,7 @@ export default function YearDetailView({ constituencyName, year }: YearDetailVie
   };
   const fallbackColors = ['#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6', '#f59e0b', '#6366f1'];
 
-  const chartData = candidates.slice(0, 5).map((c: any, index: number) => ({
+  const chartData = candidates.slice(0, 5).map((c, index) => ({
     name: c.candidate_name,
     votes: c.votes,
     party: c.party,
@@ -141,7 +141,7 @@ export default function YearDetailView({ constituencyName, year }: YearDetailVie
                 <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 12 }} />
                 <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '8px' }} />
                 <Bar dataKey="votes" radius={[0, 4, 4, 0]}>
-                  {chartData.map((entry: any, index: number) => (
+                  {chartData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
                 </Bar>
